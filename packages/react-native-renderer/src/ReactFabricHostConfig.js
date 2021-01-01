@@ -18,6 +18,8 @@ import type {
   TouchedViewDataAtPoint,
 } from './ReactNativeTypes';
 
+import type {Fiber} from 'react-reconciler/src/ReactInternalTypes';
+
 import {mountSafeCallback_NOT_REALLY_SAFE} from './NativeMethodsMixinUtils';
 import {create, diff} from './ReactNativeAttributePayload';
 
@@ -281,16 +283,18 @@ export function getRootHostContext(
 
 export function getChildHostContext(
   parentHostContext: HostContext,
-  type: string,
+  fiber: Fiber,
   rootContainerInstance: Container,
 ): HostContext {
+  const type = fiber.type;
   const prevIsInAParentText = parentHostContext.isInAParentText;
   const isInAParentText =
     type === 'AndroidTextInput' || // Android
     type === 'RCTMultilineTextInputView' || // iOS
     type === 'RCTSinglelineTextInputView' || // iOS
     type === 'RCTText' ||
-    type === 'RCTVirtualText';
+    type === 'RCTVirtualText' ||
+    !!(fiber.return && fiber.return.type && fiber.return.type.canRenderString);
 
   if (prevIsInAParentText !== isInAParentText) {
     return {isInAParentText};

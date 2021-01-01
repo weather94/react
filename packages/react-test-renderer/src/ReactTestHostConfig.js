@@ -6,7 +6,7 @@
  *
  * @flow
  */
-
+import type {Fiber} from './ReactInternalTypes';
 import type {ReactFundamentalComponentInstance} from 'shared/ReactTypes';
 
 import {REACT_OPAQUE_ID_TYPE} from 'shared/ReactSymbols';
@@ -133,7 +133,7 @@ export function getRootHostContext(
 
 export function getChildHostContext(
   parentHostContext: HostContext,
-  type: string,
+  fiber: Fiber,
   rootContainerInstance: Container,
 ): HostContext {
   return NO_CONTEXT;
